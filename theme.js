@@ -1,0 +1,56 @@
+export const Colors = {
+  primary: '#0F6E56',
+  primaryDark: '#085041',
+  primaryLight: '#1D9E75',
+  primaryMuted: '#5DCAA5',
+  primarySurface: '#E1F5EE',
+  halalBg: '#E1F5EE',
+  halalText: '#085041',
+  mixedBg: '#FAEEDA',
+  mixedText: '#633806',
+  nonHalalBg: '#FCEBEB',
+  nonHalalText: '#791F1F',
+  success: '#1D9E75',
+  warning: '#BA7517',
+  danger: '#E24B4A',
+  info: '#378ADD',
+  white: '#FFFFFF',
+  gray50: '#F8F8F7',
+  gray100: '#F1EFE8',
+  gray200: '#D3D1C7',
+  gray400: '#888780',
+  gray600: '#5F5E5A',
+  gray900: '#1A1A19',
+  bgPrimary: '#FFFFFF',
+  bgSecondary: '#F8F8F7',
+  bgTertiary: '#F1EFE8',
+  textPrimary: '#1A1A19',
+  textSecondary: '#5F5E5A',
+  textTertiary: '#888780',
+  textInverse: '#FFFFFF',
+  borderLight: 'rgba(0,0,0,0.08)',
+  borderMedium: 'rgba(0,0,0,0.14)',
+  borderDark: 'rgba(0,0,0,0.22)',
+  statusPaid: { bg: '#E1F5EE', text: '#085041' },
+  statusPickup: { bg: '#FAEEDA', text: '#633806' },
+  statusDone: { bg: '#F1EFE8', text: '#5F5E5A' },
+};
+
+export const Typography = {
+  displayLg: { fontSize: 28, fontWeight: '500', lineHeight: 34 },
+  displayMd: { fontSize: 22, fontWeight: '500', lineHeight: 28 },
+  headingLg: { fontSize: 18, fontWeight: '500', lineHeight: 24 },
+  headingMd: { fontSize: 16, fontWeight: '500', lineHeight: 22 },
+  headingSm: { fontSize: 14, fontWeight: '500', lineHeight: 20 },
+  bodyLg: { fontSize: 16, fontWeight: '400', lineHeight: 24 },
+  bodyMd: { fontSize: 14, fontWeight: '400', lineHeight: 20 },
+  bodySm: { fontSize: 13, fontWeight: '400', lineHeight: 18 },
+  caption: { fontSize: 12, fontWeight: '400', lineHeight: 16 },
+  label: { fontSize: 11, fontWeight: '500', lineHeight: 14, letterSpacing: 0.5 },
+};
+
+export const Spacing = { xs: 4, sm: 8, md: 12, lg: 16, xl: 20, xxl: 24, xxxl: 32 };
+export const Radius = { sm: 6, md: 10, lg: 14, xl: 20, full: 999 };
+export const Shadows = {
+  card: { shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 4, elevation: 2 },
+};
