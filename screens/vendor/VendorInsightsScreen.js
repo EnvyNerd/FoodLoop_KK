@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, Typography, Spacing, Radius } from '../../theme';
 import { getVendorStats } from '../../services/api';
+import { getUnreadCount } from '../../services/notifications';
 
 const WEEKLY = [
   { day: 'Mon', value: 6, total: 10 },
@@ -14,9 +15,18 @@ const WEEKLY = [
   { day: 'Sun', value: 3, total: 10 },
 ];
 
-export default function VendorInsightsScreen() {
+export default function VendorInsightsScreen({ navigation }) {
   const [stats, setStats] = useState(null);
-  useEffect(() => { getVendorStats().then(res => setStats(res.stats || res)).catch(console.log); }, []);
+  const [unreadCount, setUnreadCount] = useState(0);
+  useEffect(() => {
+    getVendorStats().then(res => setStats(res.stats || res)).catch(console.log);
+    setUnreadCount(getUnreadCount('vendor-001'));
+  }, []);
+
+  function onRefresh() {
+    getVendorStats().then(res => setStats(res.stats || res)).catch(console.log);
+    setUnreadCount(getUnreadCount('vendor-001'));
+  }
   const st = stats || { sellThroughRate: 0, avgRating: 0, totalReviews: 0, monthFoodRescued: 0, monthCO2Saved: 0, monthSold: 0 };
   const maxVal = Math.max(...WEEKLY.map(d => d.value));
 
@@ -24,9 +34,16 @@ export default function VendorInsightsScreen() {
     <SafeAreaView style={s.container}>
       <View style={s.topBar}>
         <Text style={s.heading}>Insights</Text>
-        <Text style={s.sub}>Performance & waste data</Text>
+        <TouchableOpacity style={s.bellBtn} onPress={() => navigation.navigate('Notifications')}>
+          <Text style={s.bellIcon}>{'\u{1F514}'}</Text>
+          {unreadCount > 0 && (
+            <View style={s.badge}>
+              <Text style={s.badgeText}>{unreadCount > 9 ? '9+' : unreadCount}</Text>
+            </View>
+          )}
+        </TouchableOpacity>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} refreshControl={<RefreshControl refreshing={false} onRefresh={onRefresh} />}>
         <View style={s.statsGrid}>
           <View style={s.statCard}><Text style={s.statVal}>{st.sellThroughRate}%</Text><Text style={s.statLabel}>Sell-through rate</Text><Text style={s.statSub}>Last 30 days</Text></View>
           <View style={s.statCard}><Text style={s.statVal}>{st.avgRating.toFixed(1)}</Text><Text style={s.statLabel}>Avg. rating</Text><Text style={s.statSub}>{st.totalReviews} reviews</Text></View>
@@ -66,9 +83,12 @@ export default function VendorInsightsScreen() {
 
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.bgPrimary },
-  topBar: { backgroundColor: Colors.primary, padding: Spacing.lg, paddingBottom: Spacing.md },
+  topBar: { backgroundColor: Colors.primary, padding: Spacing.lg, paddingBottom: Spacing.md, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   heading: { ...Typography.headingMd, color: Colors.white },
-  sub: { ...Typography.caption, color: Colors.primaryMuted, marginTop: 2 },
+  bellBtn: { padding: 4 },
+  bellIcon: { fontSize: 20, color: Colors.white },
+  badge: { position: 'absolute', top: 0, right: 0, backgroundColor: '#EF4444', borderRadius: 8, minWidth: 16, height: 16, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 3 },
+  badgeText: { color: '#fff', fontSize: 9, fontWeight: '700' },
   statsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.sm, padding: Spacing.lg, paddingBottom: 0 },
   statCard: { width: '47%', backgroundColor: Colors.bgSecondary, borderRadius: Radius.md, padding: Spacing.md },
   statGreen: { backgroundColor: Colors.primarySurface },

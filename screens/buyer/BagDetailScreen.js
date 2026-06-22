@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, Share, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import QRCode from 'react-native-qrcode-svg';
 import { Colors, Typography, Spacing, Radius, Shadows } from '../../theme';
@@ -26,6 +26,14 @@ export default function BagDetailScreen({ route, navigation }) {
       setOrderId(res.order?.id);
       setReserved(true);
     } catch (e) { console.log('Reserve error:', e); }
+  }
+
+  async function handleShare() {
+    try {
+      await Share.share({
+        message: `Check out "${bag.name}" at ${bag.vendor} for only RM ${bag.priceNow} (was RM ${bag.priceOriginal})! Pickup: ${formatPickupWindow(bag.pickupStart, bag.pickupEnd)}. Download FoodLoop to reserve yours!`,
+      });
+    } catch (e) { console.log(e); }
   }
 
   if (loading || !bag) return (<SafeAreaView style={s.container}><Text style={{ textAlign: 'center', marginTop: 100 }}>Loading...</Text></SafeAreaView>);
@@ -77,6 +85,7 @@ export default function BagDetailScreen({ route, navigation }) {
         )}
         <View style={s.heroOverlay} />
         <TouchableOpacity style={s.backBtn} onPress={() => navigation.goBack()}><Text style={s.backBtnText}>{'\u2039'} Back</Text></TouchableOpacity>
+        <TouchableOpacity style={s.shareBtn} onPress={handleShare} accessibilityLabel="Share this bag"><Text style={s.shareBtnText}>{'\u{1F4E4}'}</Text></TouchableOpacity>
       </View>
       <ScrollView style={s.body} showsVerticalScrollIndicator={false}>
         <View style={s.headerRow}>
@@ -111,6 +120,8 @@ const s = StyleSheet.create({
   heroFallback: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   backBtn: { position: 'absolute', top: 12, left: 12, backgroundColor: 'rgba(0,0,0,0.3)', borderRadius: Radius.sm, paddingHorizontal: 12, paddingVertical: 6, zIndex: 2 },
   backBtnText: { color: Colors.white, ...Typography.bodySm },
+  shareBtn: { position: 'absolute', top: 12, right: 12, backgroundColor: 'rgba(0,0,0,0.3)', borderRadius: Radius.sm, paddingHorizontal: 10, paddingVertical: 6, zIndex: 2 },
+  shareBtnText: { fontSize: 16 },
   heroIcon: { fontSize: 60 },
   body: { flex: 1, padding: Spacing.lg },
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: Spacing.md },

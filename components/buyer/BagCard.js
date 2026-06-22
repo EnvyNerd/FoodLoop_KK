@@ -4,7 +4,7 @@ import { Colors, Typography, Spacing, Radius, Shadows } from '../../theme';
 import { HalalBadge } from '../common';
 import { formatPickupWindow } from '../../utils/time';
 
-export function BagCard({ bag, onPress }) {
+export function BagCard({ bag, onPress, onVendorPress }) {
   const savePct = Math.round(((bag.priceOriginal - bag.priceNow) / bag.priceOriginal) * 100);
   const isLow = bag.quantityLeft <= 3;
   const catEmoji = { Bakery: '\u{1F556}', Cafe: '\u2615', Restaurant: '\u{1F371}', Hotel: '\u{1F37D}\uFE0F', Supermarket: '\u{1F6D2}' };
@@ -30,7 +30,17 @@ export function BagCard({ bag, onPress }) {
       </View>
       <View style={styles.body}>
         <Text style={styles.name} numberOfLines={1}>{bag.name}</Text>
-        <Text style={styles.meta}>{bag.distance} km away · {bag.category}</Text>
+        <View style={styles.metaRow}>
+          <Text style={styles.meta}>{bag.distance} km away</Text>
+          {onVendorPress ? (
+            <TouchableOpacity onPress={() => onVendorPress(bag)}>
+              <Text style={styles.vendorLink}>{bag.vendor}</Text>
+            </TouchableOpacity>
+          ) : (
+            <Text style={styles.meta}> · {bag.vendor}</Text>
+          )}
+          <Text style={styles.meta}> · {bag.category}</Text>
+        </View>
         <View style={styles.footer}>
           <View style={styles.priceRow}>
             <Text style={styles.priceNow}>RM {bag.priceNow}</Text>
@@ -58,7 +68,9 @@ const styles = StyleSheet.create({
   qtyTagText: { ...Typography.label, fontSize: 10, color: Colors.textSecondary },
   body: { padding: Spacing.md },
   name: { ...Typography.headingSm, color: Colors.textPrimary, marginBottom: 2 },
-  meta: { ...Typography.caption, color: Colors.textSecondary, marginBottom: Spacing.sm },
+  metaRow: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', marginBottom: Spacing.sm },
+  meta: { ...Typography.caption, color: Colors.textSecondary },
+  vendorLink: { ...Typography.caption, color: Colors.primary, textDecorationLine: 'underline' },
   footer: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   priceRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   priceNow: { ...Typography.headingMd, color: Colors.primary },

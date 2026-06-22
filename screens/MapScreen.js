@@ -85,7 +85,9 @@ export default function MapScreen({ navigation }) {
             <View style={[s.colorBar, { backgroundColor: selectedBag.imageColor }]} />
             <View style={s.cardInfo}>
               <Text style={s.cardName} numberOfLines={1}>{selectedBag.name}</Text>
-              <Text style={s.cardMeta}>{selectedBag.vendor} · RM {selectedBag.priceNow} · {selectedBag.pickupStart}–{selectedBag.pickupEnd}</Text>
+              <TouchableOpacity onPress={() => { navigation.navigate('VendorStorefront', { vendorId: selectedBag.vendorId }); setSelectedBag(null); }}>
+                <Text style={s.cardMeta}>{selectedBag.vendor} · RM {selectedBag.priceNow} · {selectedBag.pickupStart}–{selectedBag.pickupEnd}</Text>
+              </TouchableOpacity>
               <Text style={s.cardDist}>{selectedBag.distance} km away · {selectedBag.quantityLeft} left</Text>
             </View>
           </View>

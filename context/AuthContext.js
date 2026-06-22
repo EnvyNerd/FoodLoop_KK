@@ -26,8 +26,8 @@ export function AuthProvider({ children }) {
     }
   }
 
-  async function signIn(email, password) {
-    const data = await apiLogin(email, password);
+  async function signIn(email, password, role) {
+    const data = await apiLogin(email, password, role);
     const token = data.token;
     await SecureStore.setItemAsync(TOKEN_KEY, token);
     setUserToken(token);
