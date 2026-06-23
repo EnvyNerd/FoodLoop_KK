@@ -19,8 +19,12 @@ function getStatusIndex(status) {
 
 function getPickupCountdown(pickupStart) {
   try {
+    if (!pickupStart || typeof pickupStart !== 'string') return null;
+    const parts = pickupStart.split(':');
+    if (parts.length < 2) return null;
+    const [h, m] = parts.map(Number);
+    if (isNaN(h) || isNaN(m)) return null;
     const now = new Date();
-    const [h, m] = pickupStart.split(':').map(Number);
     const pickup = new Date();
     pickup.setHours(h, m, 0, 0);
     const diff = pickup - now;
@@ -61,7 +65,8 @@ export default function OrderDetailScreen({ route, navigation }) {
   }
 
   const currentStep = getStatusIndex(order.status);
-  const countdown = getPickupCountdown(order.pickupWindow?.split('\u2013')[0]?.trim());
+  const pickupStartTime = order.pickupWindow?.split(/[–-]/)[0]?.trim() || order.pickup_start;
+  const countdown = pickupStartTime ? getPickupCountdown(pickupStartTime) : null;
 
   return (
     <SafeAreaView style={s.container}>

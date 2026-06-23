@@ -21,8 +21,10 @@ export function formatTime12h(time24) {
  * @returns {string} e.g. "7:30–8:30 PM" or "9:00–10:00 PM"
  */
 export function formatPickupWindow(start, end) {
+  if (!start || !end) return '';
   const start12 = formatTime12h(start);
   const end12 = formatTime12h(end);
+  if (!start12 || !end12) return '';
   const startAMPM = start12.slice(-2);
   const endAMPM = end12.slice(-2);
   if (startAMPM === endAMPM) {
