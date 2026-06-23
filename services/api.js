@@ -4,7 +4,7 @@ import { addNotification } from './notifications';
 // Backend URL - set to null for mock data, or the deployed URL for real backend
 // Mock data (local): null
 // Real backend: "https://foodloop-api-jolk.onrender.com"
-const API_BASE_URL = null; // Switch to real backend URL when ready
+const API_BASE_URL = "https://foodloop-api-jolk.onrender.com";
 
 const TOKEN_KEY = 'auth_token';
 
